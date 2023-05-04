@@ -25,9 +25,36 @@ extension String {
     /// Bool Value
     var boolValue: Bool { get { return ["True","TRUE","true","t","YES","yes","Y","y","1"].contains(self) } }
     /// double Value
-    var doubleValue : Double { get { return Double(self.replacingOccurrences(of: ",", with: "")) ?? 0.0 } }
+    var doubleValue : Double {
+        get {
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .decimal
+            return formatter.number(from: self)?.doubleValue ?? 0.0
+        }
+    }
+    /// double Value optional
+    var doubleFormatter: Double? {
+        get {
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .decimal
+            return formatter.number(from: self)?.doubleValue
+        }
+    }
     /// decimal Value
-    var decimalValue : NSDecimalNumber { get { return NSDecimalNumber(string: self.replacingOccurrences(of: ",", with: "")) } }
+    var decimalFormatter : Decimal? {
+        get {
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .decimal
+            return formatter.number(from: self)?.decimalValue
+        }
+    }
+    /// 콤마 제거 숫자 String
+    var removeNumberComma: String {
+        get {
+            let groupingSeparator = NumberFormatter().groupingSeparator ?? ","
+            return self.replacingOccurrences(of: groupingSeparator, with: "")
+        }
+    }
     //============================================================
     // MARK: - Data Setting
     //============================================================
@@ -46,10 +73,10 @@ extension String {
     }
     
     /// decimal 포메팅
-    func decimalFroamt(max:Int = 2, min:Int = 2, roundMode:NumberFormatter.RoundingMode = .halfUp) -> String? {
-        let str = self.replacingOccurrences(of: ",", with: "")
-        if let doubleValue = Double(str) {
-            return doubleValue.decimalFroamt(max:max,min: min,roundMode: roundMode)
+    func decimalFormat(max:Int = 2, min:Int = 2, roundMode:NumberFormatter.RoundingMode = .halfUp) -> String? {
+        let str = self.removeNumberComma
+        if let doubleValue = str.doubleFormatter {
+            return doubleValue.decimalFormat(max:max,min: min,roundMode: roundMode)
         } else {
             return nil
         }
@@ -489,6 +516,23 @@ extension String {
         return attrStr
     }
     
+    func attrBold(font:UIFont, strBoldArr:[String]) -> NSAttributedString {
+        let attrs = [
+            NSAttributedString.Key.font: FONT_NOTOSANS_KR_BOLD(font.pointSize)
+        ]
+        let nonBoldAttribute = [
+            NSAttributedString.Key.font: font
+        ]
+        let attrStr = NSMutableAttributedString(string: self, attributes: nonBoldAttribute)
+        strBoldArr.forEach { strBold in
+            if let range = self.range(of: strBold) {
+                let nsRange = NSRange(range, in: self)
+                attrStr.setAttributes(attrs, range: nsRange)
+            }
+        }
+        return attrStr
+    }
+    
     func attrColor(font:UIFont, fontColor:UIColor, strBold:String) -> NSAttributedString {
         let attrs = [
             NSAttributedString.Key.font: font,
@@ -534,6 +578,11 @@ extension String {
     
     func trim() -> String {
         return self.trimmingCharacters(in: .whitespaces)
+    }
+    
+    func rpad(toLength length: Int, withPad padString: String = " ") -> String {
+        let padding = String(repeating: padString, count: max(0, length - self.count))
+        return self + padding
     }
 }
 

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import SDWebImage // pod 'SDWebImage', '= 5.12.2'
+import SDWebImage
 
 extension UIImageView {
     

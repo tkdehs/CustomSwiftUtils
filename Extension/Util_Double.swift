@@ -8,7 +8,7 @@
 import UIKit
 
 extension Double {
-    func decimalFroamt(max:Int = 2, min:Int = 2, roundMode:NumberFormatter.RoundingMode = .halfUp) -> String{
+    func decimalFormat(max:Int = 2, min:Int = 2, roundMode:NumberFormatter.RoundingMode = .halfUp) -> String{
         
         let formatter = NumberFormatter()
         formatter.maximumFractionDigits = max
@@ -23,8 +23,23 @@ extension Double {
         }
     }
     
-    func decimalFroamt(currency:Currency) -> String{
-        self.decimalFroamt(max: currency.data.dotCount, min: currency.data.dotCount, roundMode: currency.data.rundMode)
+    func decimalFormat(count:Int, roundMode:NumberFormatter.RoundingMode = .halfUp) -> String{
+        
+        let formatter = NumberFormatter()
+        formatter.maximumFractionDigits = count
+        formatter.minimumFractionDigits = count
+        formatter.numberStyle = .decimal
+        formatter.roundingMode = roundMode
+        formatter.usesGroupingSeparator = true
+        if let result = formatter.string(for: self) {
+            return result
+        } else {
+            return ""
+        }
+    }
+    
+    func decimalFormat(currency:Currency) -> String{
+        self.decimalFormat(max: currency.data.dotCount, min: currency.data.dotCount, roundMode: currency.data.rundMode)
     }
     
     /// 소수점 999 현상 떄문에 쓰는 대시멀

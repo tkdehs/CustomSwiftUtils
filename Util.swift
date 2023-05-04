@@ -10,7 +10,6 @@ import UIKit
 import Photos
 import SafariServices
 import SystemConfiguration
-import SVProgressHUD
 import AppTrackingTransparency
 import AdSupport
 
@@ -36,29 +35,6 @@ class Util: NSObject {
     //============================================================
     // MARK: - UI Util
     //============================================================
-    
-    /// 프로그레시브 뷰 ON
-    /// - Parameter strTitle: 프로그레시브 타이틀
-    class func showProgress(strTitle: String? = nil) {
-        if let strTitle = strTitle {
-            SVProgressHUD.setDefaultStyle(.light)
-            SVProgressHUD.setBackgroundLayerColor(.white)
-            SVProgressHUD.setBackgroundColor(.white)
-            SVProgressHUD.setDefaultMaskType(.clear)
-            SVProgressHUD.show(withStatus: strTitle)
-        } else {
-            SVProgressHUD.setDefaultStyle(.light)
-            SVProgressHUD.setBackgroundLayerColor(.clear)
-            SVProgressHUD.setBackgroundColor(.clear)
-            SVProgressHUD.setDefaultMaskType(.clear)
-            SVProgressHUD.show()
-        }
-    }
-    
-    /// 프로그레시브 뷰 OFF
-    class func dismissProgress() {
-        SVProgressHUD.dismiss()
-    }
     
     /// 토스트 메세지 출력
     ///
